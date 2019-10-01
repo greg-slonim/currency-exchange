@@ -15,19 +15,19 @@ public class ForeignExchangeResource implements ForeignExchangeService {
     private static final String NO_RECOMMENDATION = "We cannot issue recommendation at this time" +
             "due to absence of historical results.";
 
-    private final ExchangeRatesApi exchangeRates;
+    private final ExchangeRatesApi exchangeServiceClient;
 
     ForeignExchangeResource(ExchangeRatesApi exchangeRatesApi) {
-        this.exchangeRates = exchangeRatesApi;
+        this.exchangeServiceClient = exchangeRatesApi;
     }
 
     @Override
     public ExchangeResult getExchangeAndRecommendations(ExchangeRequest request) {
-        Currency rate = exchangeRates.getRate(request);
+        Currency rate = exchangeServiceClient.getRate(request);
         OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
         OffsetDateTime start = now.minusDays(7);
 
-        HistoricalResult historicalResult = exchangeRates.getHistoricalRate(
+        HistoricalResult historicalResult = exchangeServiceClient.getHistoricalRate(
                 HistoricalRequest.builder()
                         .base(request.getBase())
                         .symbol(request.getSymbol())
@@ -35,11 +35,11 @@ public class ForeignExchangeResource implements ForeignExchangeService {
                         .endDate(now)
                         .build());
 
+        // SUPER naive! Need trends!
         OptionalDouble maybeRateAverage = historicalResult.getRates().values().stream()
                 .mapToDouble(Currency::getValue)
                 .average();
 
-        // SUPER naive.
         ExchangeResult.Builder builder = ExchangeResult.builder().value(rate);
         if (!maybeRateAverage.isPresent()) {
             return builder.recommendation(NO_RECOMMENDATION).build();

@@ -11,6 +11,7 @@ import java.util.Objects;
 public final class Currency {
     private final double value;
     private final String currencySymbol;
+    private volatile int memoizedHashCode;
 
     private Currency(double value, String currencySymbol) {
         this.value = value;
@@ -34,16 +35,20 @@ public final class Currency {
 
     @Override
     public int hashCode() {
-        return Objects.hash(value, currencySymbol);
+        if (memoizedHashCode == 0) {
+            memoizedHashCode = Objects.hash(value, currencySymbol);
+        }
+        return memoizedHashCode;
     }
 
     @Override
     public String toString() {
         return new StringBuilder("Currency")
                 .append('{')
+                .append(currencySymbol)
+                .append(": ")
                 .append("value")
                 .append(": ")
-                .append(currencySymbol)
                 .append(value)
                 .append('}')
                 .toString();
@@ -60,9 +65,10 @@ public final class Currency {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
         private String currencySymbol;
-
         private double value;
+
         private Builder() {}
+
         @JsonSetter("value")
         public Builder value(double value) {
             this.value = value;
