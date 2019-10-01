@@ -4,6 +4,7 @@ Notes
 -----
 * Requires Java 8 (not 11). There is some weirdness in dependencies that I did not have time to resolve.
 * I used HTTP POST for this API because I felt it was cleaner to send payloads to the API, more extensible.
+* I also decided not to hardcode `EUR` and make the API more flexible.
 
 How to start the currency converter app
 ---------------------------------------
