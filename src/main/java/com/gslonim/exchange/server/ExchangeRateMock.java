@@ -21,10 +21,10 @@ public class ExchangeRateMock implements ExchangeRatesApi {
     private static Map<String, Currency> createMockResults() {
         return ImmutableMap.<String, Currency>builder()
                 .put("2018-09-07", Currency.of(0.8609556608, "EUR"))
-                .put("2018-09-04T12:00:00.000Z", Currency.of(0.864902266, "EUR"))
-                .put("2018-09-05T12:00:00.000Z", Currency.of(0.8634087377, "EUR"))
-                .put("2018-09-03T12:00:00.000Z", Currency.of(0.8614006374, "EUR"))
-                .put("2018-09-06T12:00:00.000Z", Currency.of(0.859549596, "EUR"))
+                .put("2018-09-04", Currency.of(0.864902266, "EUR"))
+                .put("2018-09-05", Currency.of(0.8634087377, "EUR"))
+                .put("2018-09-03", Currency.of(0.8614006374, "EUR"))
+                .put("2018-09-06", Currency.of(0.859549596, "EUR"))
                 .build();
     }
 }
